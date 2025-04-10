@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include axis_bank_integration *.css
+recursive-include axis_bank_integration *.csv
+recursive-include axis_bank_integration *.html
+recursive-include axis_bank_integration *.ico
+recursive-include axis_bank_integration *.js
+recursive-include axis_bank_integration *.json
+recursive-include axis_bank_integration *.md
+recursive-include axis_bank_integration *.png
+recursive-include axis_bank_integration *.py
+recursive-include axis_bank_integration *.svg
+recursive-include axis_bank_integration *.txt
+recursive-exclude axis_bank_integration *.pyc

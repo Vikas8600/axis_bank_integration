@@ -1,0 +1,60 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-11-23 12:28:48.806341",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "url",
+  "port",
+  "email",
+  "bank_configuration"
+ ],
+ "fields": [
+  {
+   "fieldname": "url",
+   "fieldtype": "Data",
+   "label": "URL"
+  },
+  {
+   "fieldname": "port",
+   "fieldtype": "Data",
+   "label": "PORT"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Link",
+   "label": "Email ",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "bank_configuration",
+   "fieldtype": "Table",
+   "label": "Bank Configuration",
+   "options": "Bank Configuration"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-12-13 10:37:12.476850",
+ "modified_by": "Administrator",
+ "module": "Axis Bank Integration",
+ "name": "Bank Integration Setting",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
