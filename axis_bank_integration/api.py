@@ -68,7 +68,7 @@ def payment_process_from_bank(Transaction_Date, Client_Code, Virtual_Account_No,
         customer_id = (Acc_No or Virtual_Account_No)[4:]
 
         # Validate Customer
-        if not frappe.db.exists("Customer", customer_id):
+        if not frappe.get_value("Customer", customer_id):
             frappe.local.response['http_status_code'] = 404
             return {"message": "Invalid Customer", "stts_flg": "N"}
 
@@ -86,7 +86,7 @@ def payment_process_from_bank(Transaction_Date, Client_Code, Virtual_Account_No,
         ref_no = f"{types}/{Reference_No}"
 
         # Check for non-cancelled duplicate
-        existing_payment = frappe.db.exists("Payment Entry", {
+        existing_payment = frappe.get_value("Payment Entry", {
             "reference_no": ref_no,
             "docstatus": ["!=", 2]
         })
