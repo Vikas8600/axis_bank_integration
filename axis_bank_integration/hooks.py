@@ -106,23 +106,23 @@ doctype_js = {"Customer" : "public/js/custom.js"}
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"axis_bank_integration.tasks.all"
 # 	],
 # 	"daily": [
 # 		"axis_bank_integration.tasks.daily"
 # 	],
-# 	"hourly": [
-# 		"axis_bank_integration.tasks.hourly"
-# 	],
+	"hourly": [
+		"axis_bank_integration.axis_bank_integration.doctype.bank_transaction_log.bank_transaction_log.create_payment_entry_background"
+	],
 # 	"weekly": [
 # 		"axis_bank_integration.tasks.weekly"
 # 	]
 # 	"monthly": [
 # 		"axis_bank_integration.tasks.monthly"
 # 	]
-# }
+}
 
 # Testing
 # -------

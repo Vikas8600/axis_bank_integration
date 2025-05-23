@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-23 18:02:59.345429",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "transaction_date",
+  "virtual_account_no",
+  "reference_no",
+  "amount",
+  "type",
+  "payment_entry_created"
+ ],
+ "fields": [
+  {
+   "fieldname": "transaction_date",
+   "fieldtype": "Date",
+   "label": "Transaction Date"
+  },
+  {
+   "fieldname": "virtual_account_no",
+   "fieldtype": "Data",
+   "label": "Virtual Account No"
+  },
+  {
+   "fieldname": "reference_no",
+   "fieldtype": "Data",
+   "label": "Reference No"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Data",
+   "label": "Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "payment_entry_created",
+   "fieldtype": "Check",
+   "label": "Payment Entry Created"
+  }
+ ],
+ "grid_page_length": 50,
+ "in_create": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-05-23 18:07:20.685140",
+ "modified_by": "Administrator",
+ "module": "Axis Bank Integration",
+ "name": "Bank Transaction Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "read_only": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

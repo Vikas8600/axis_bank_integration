@@ -1,5 +1,6 @@
 from pickle import NONE
 from re import S
+from frappe.utils import getdate
 from frappe.utils.data import flt
 from lib2to3.pgen2.token import BACKQUOTE
 from logging import exception
@@ -49,79 +50,18 @@ def validate_corporate_id(Transaction_Date, Account_Number, Client_Code, Virtual
 @frappe.whitelist(allow_guest=True)
 def payment_process_from_bank(Transaction_Date, Client_Code, Virtual_Account_No, Reference_No, Amount, Type, Remitter_IFSC, Remitter_Name, Remitting_Bank_Branch, Remitter_Account_No):
     try:
-        # Get bank integration settings
-        doc = frappe.get_doc("Bank Integration Setting")
-        Acc_No = None
-        auto_submit = 0
-        company, cost_center, company_ba = None, None, None
-
-        for config in doc.bank_configuration:
-            company = config.company
-            cost_center = config.cost_center
-            company_ba = frappe.get_doc("Bank Account", {"name": config.bank_account})
-            auto_submit += config.auto_submit_of_payment_entry
-
-            if config.has_special_character == 1:
-                Acc_No = Virtual_Account_No[:-5] + config.special_character + Virtual_Account_No[-5:]
-
-        # Determine Customer ID
-        customer_id = (Acc_No or Virtual_Account_No)[4:]
-
-        # Validate Customer
-        if not frappe.get_value("Customer", customer_id):
-            frappe.local.response['http_status_code'] = 404
-            return {"message": "Invalid Customer", "stts_flg": "N"}
-
-        cus = frappe.get_doc("Customer", customer_id)
-        party_type = "Customer"
-        party = cus.name
-
-        # Get account details
-        party_details = get_party_details(company, party_type, party, Transaction_Date, cost_center)
-        com_acc_details = get_bank_account_details(company_ba.name)
-
-        # Format payment type
-        payment_type_map = {"N": "NEFT", "R": "RTGS", "I": "IMPS"}
-        types = payment_type_map.get(Type, Type)
-        ref_no = f"{types}/{Reference_No}"
-
-        # Check for non-cancelled duplicate
-        existing_payment = frappe.get_value("Payment Entry", {
-            "reference_no": ref_no,
-            "docstatus": ["!=", 2]
-        })
-        if existing_payment:
-            return {"message": "Duplicate Entry", "stts_flg": "N"}
-
-        # Create Payment Entry
-        payment_entry = frappe.new_doc("Payment Entry")
-        payment_entry.update({
-            "payment_type": "Receive",
-            "party_type": "Customer",
-            "posting_date": Transaction_Date,
-            "paid_amount": flt(Amount),
-            "received_amount": flt(Amount),
-            "bank_account": company_ba.name,
-            "party": cus.name,
-            "party_name": party_details.get("party_name"),
-            "paid_from": party_details.get("party_account"),
-            "paid_from_account_currency": party_details.get("party_account_currency"),
-            "paid_to_account_currency": party_details.get("party_account_currency"),
-            "party_balance": party_details.get("party_balance"),
-            "paid_from_account_balance": party_details.get("account_balance"),
-            "paid_to": com_acc_details.get("account"),
-            "reference_no": ref_no,
-            "reference_date": Transaction_Date,
-            "source_exchange_rate": 1,
-            "target_exchange_rate": 1
-        })
-
-        if auto_submit == 1:
-            payment_entry.submit()
+        val=frappe.db.get_value("Bank Transaction Log",{"reference_no":Reference_No},"name")
+        if not val:
+            doc=frappe.new_doc("Bank Transaction Log")
+            doc.transaction_date=getdate(Transaction_Date)
+            doc.virtual_account_no=Virtual_Account_No
+            doc.reference_no=Reference_No
+            doc.amount=Amount
+            doc.type=Type
+            doc.insert(ignore_permissions=True)
+            return {"message": "Payment Successful", "stts_flg": "Y"}
         else:
-            payment_entry.insert(ignore_permissions=True)
-
-        return {"message": "Payment Successful", "stts_flg": "Y"}
+            {"message": "Payment Failed", "stts_flg": "N"}
 
     except Exception:
         frappe.log_error(frappe.get_traceback(), "Axis Bank Integration Payment Error")
@@ -129,3 +69,6 @@ def payment_process_from_bank(Transaction_Date, Client_Code, Virtual_Account_No,
         return {"message": "Payment Failed", "stts_flg": "N"}
 
 #--------------------------------------------------------------------------------------------- 
+
+
+
