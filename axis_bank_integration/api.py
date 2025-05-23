@@ -96,47 +96,48 @@ def payment_process_from_bank(Transaction_Date, Client_Code, Virtual_Account_No,
         types = Type
 
     try:
-
         cus = frappe.get_doc("Customer", customer_id)
         # bank_acc = frappe.get_doc("Bank Account", {"party": customer_id, "bank_account_no": Remitter_Account_No})
         co_bank_acc = frappe.db.get_value("Bank Account", {"name": company_ba.name}, ["name"])
         ref_no = types + "/" + Reference_No
         # if cus and bank_acc:
-        if cus:
-            new_pay_ent = frappe.new_doc("Payment Entry")
-            new_pay_ent.payment_type = "Receive"
-            new_pay_ent.party_type = "Customer"
-            new_pay_ent.posting_date = Transaction_Date
-            # new_pay_ent.mode_of_payment = types
-            new_pay_ent.paid_amount = flt(Amount)
-            new_pay_ent.received_amount = flt(Amount)
-            new_pay_ent.bank_account = co_bank_acc
-            new_pay_ent.party = cus.name
-            new_pay_ent.party_name = party_details.get("party_name")
-            # new_pay_ent.party_bank_account = bank_acc.name
-            new_pay_ent.paid_from = party_details.get("party_account")
-            new_pay_ent.paid_from_account_currency = party_details.get("party_account_currency")
-            new_pay_ent.paid_to_account_currency = party_details.get("party_account_currency")
-            new_pay_ent.party_balance = party_details.get("party_balance")
-            new_pay_ent.paid_from_account_balance = party_details.get("account_balance")
-            new_pay_ent.paid_to = com_acc_details.get("account")
-            new_pay_ent.reference_no = ref_no
-            new_pay_ent.reference_date = Transaction_Date
-            new_pay_ent.source_exchange_rate = 1
-            new_pay_ent.target_exchange_rate = 1
-            
-            pay_ent = frappe.db.get_value("Payment Entry", {"reference_no": ref_no},"name")
-            if not pay_ent:
-                if auto_submit == 1:
-                    new_pay_ent.submit()
-                    return {"message": "Payment Successful", "stts_flg": "Y"}
-                else:
-                    new_pay_ent.save(ignore_permissions=True)
-                    return {"message": "Payment Successful", "stts_flg": "Y"}
+        pa=frappe.db.get_value("Payment Entry",{"reference_no":ref_no},"name")
+        if not pa:
+            if cus:
+                new_pay_ent = frappe.new_doc("Payment Entry")
+                new_pay_ent.payment_type = "Receive"
+                new_pay_ent.party_type = "Customer"
+                new_pay_ent.posting_date = Transaction_Date
+                # new_pay_ent.mode_of_payment = types
+                new_pay_ent.paid_amount = flt(Amount)
+                new_pay_ent.received_amount = flt(Amount)
+                new_pay_ent.bank_account = co_bank_acc
+                new_pay_ent.party = cus.name
+                new_pay_ent.party_name = party_details.get("party_name")
+                # new_pay_ent.party_bank_account = bank_acc.name
+                new_pay_ent.paid_from = party_details.get("party_account")
+                new_pay_ent.paid_from_account_currency = party_details.get("party_account_currency")
+                new_pay_ent.paid_to_account_currency = party_details.get("party_account_currency")
+                new_pay_ent.party_balance = party_details.get("party_balance")
+                new_pay_ent.paid_from_account_balance = party_details.get("account_balance")
+                new_pay_ent.paid_to = com_acc_details.get("account")
+                new_pay_ent.reference_no = ref_no
+                new_pay_ent.reference_date = Transaction_Date
+                new_pay_ent.source_exchange_rate = 1
+                new_pay_ent.target_exchange_rate = 1
+                
+                pay_ent = frappe.db.get_value("Payment Entry", {"reference_no": ref_no},"name")
+                if not pay_ent:
+                    if auto_submit == 1:
+                        new_pay_ent.submit()
+                        return {"message": "Payment Successful", "stts_flg": "Y"}
+                    else:
+                        new_pay_ent.save(ignore_permissions=True)
+                        return {"message": "Payment Successful", "stts_flg": "Y"}
 
-            else:
-                # frappe.local.response['http_status_code'] = 409
-                return {"message": "Duplicate Entry", "stts_flg": "N"}
+                else:
+                    # frappe.local.response['http_status_code'] = 409
+                    return {"message": "Duplicate Entry", "stts_flg": "N"}
 
     except:
         traceback = frappe.get_traceback()
