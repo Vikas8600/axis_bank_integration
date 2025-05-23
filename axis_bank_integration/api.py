@@ -133,6 +133,7 @@ def payment_process_from_bank(Transaction_Date, Client_Code, Virtual_Account_No,
                         return {"message": "Payment Successful", "stts_flg": "Y"}
                     else:
                         new_pay_ent.save(ignore_permissions=True)
+                        frappe.db.commit()
                         return {"message": "Payment Successful", "stts_flg": "Y"}
 
                 else:
