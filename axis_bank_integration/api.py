@@ -119,7 +119,7 @@ def payment_process_from_bank(Transaction_Date, Client_Code, Virtual_Account_No,
         if auto_submit == 1:
             payment_entry.submit()
         else:
-            payment_entry.save(ignore_permissions=True)
+            payment_entry.insert(ignore_permissions=True)
 
         return {"message": "Payment Successful", "stts_flg": "Y"}
 
