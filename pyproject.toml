@@ -1,0 +1,19 @@
+[project]
+name = "axis_bank_integration"
+authors = [
+    { name = "swapnil", email = "swapnil.ghadi066@gmail.com"}
+]
+description = "Axis Bank Integration"
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    # "frappe~=15.0.0" # Installed and managed by bench.
+]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.dev-dependencies]
+# package_name = "~=1.1.0"
