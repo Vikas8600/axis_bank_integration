@@ -1,0 +1,371 @@
+{
+ "actions": [],
+ "autoname": "MOSAMBEE-.#####",
+ "creation": "2026-03-12 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "status",
+  "customer",
+  "customer_name",
+  "column_break_status",
+  "payment_entry",
+  "error_message",
+  "section_transaction",
+  "transaction_id",
+  "transaction_date",
+  "transaction_time",
+  "transaction_amount",
+  "column_break_txn",
+  "transaction_status",
+  "response_code",
+  "transaction_type_name",
+  "transaction_rrn",
+  "section_card",
+  "card_type",
+  "card_holder_name",
+  "transaction_card_number",
+  "credit_debit_card_type",
+  "column_break_card",
+  "transaction_auth_code",
+  "transaction_mode",
+  "acquirer_name",
+  "section_device",
+  "name1",
+  "merchant_id",
+  "business_name",
+  "column_break_device",
+  "transaction_terminal_id",
+  "invoice_number",
+  "bill_number",
+  "section_reference",
+  "narration",
+  "tg_transaction_id",
+  "transaction_stan",
+  "column_break_ref",
+  "transaction_batch_number",
+  "ref_txn_id",
+  "section_location",
+  "transaction_lat",
+  "transaction_long",
+  "column_break_loc",
+  "address_line1",
+  "address_line2",
+  "section_checksum",
+  "checksum",
+  "checksum_valid",
+  "section_raw",
+  "raw_data"
+ ],
+ "fields": [
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nPayment Created\nDeclined\nFailed\nDuplicate",
+   "default": "Pending",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "fetch_from": "customer.customer_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment_entry",
+   "fieldtype": "Link",
+   "label": "Payment Entry",
+   "options": "Payment Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Small Text",
+   "label": "Error Message",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_transaction",
+   "fieldtype": "Section Break",
+   "label": "Transaction Details"
+  },
+  {
+   "fieldname": "transaction_id",
+   "fieldtype": "Data",
+   "label": "Transaction ID",
+   "in_list_view": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "transaction_date",
+   "fieldtype": "Data",
+   "label": "Transaction Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "transaction_time",
+   "fieldtype": "Data",
+   "label": "Transaction Time"
+  },
+  {
+   "fieldname": "transaction_amount",
+   "fieldtype": "Currency",
+   "label": "Transaction Amount",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "column_break_txn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transaction_status",
+   "fieldtype": "Data",
+   "label": "Transaction Status"
+  },
+  {
+   "fieldname": "response_code",
+   "fieldtype": "Data",
+   "label": "Response Code"
+  },
+  {
+   "fieldname": "transaction_type_name",
+   "fieldtype": "Data",
+   "label": "Transaction Type Name"
+  },
+  {
+   "fieldname": "transaction_rrn",
+   "fieldtype": "Data",
+   "label": "Transaction RRN",
+   "description": "Reconciliation ID"
+  },
+  {
+   "fieldname": "section_card",
+   "fieldtype": "Section Break",
+   "label": "Card / Payment Details"
+  },
+  {
+   "fieldname": "card_type",
+   "fieldtype": "Data",
+   "label": "Card Type"
+  },
+  {
+   "fieldname": "card_holder_name",
+   "fieldtype": "Data",
+   "label": "Card Holder Name"
+  },
+  {
+   "fieldname": "transaction_card_number",
+   "fieldtype": "Data",
+   "label": "Card Number (Masked)"
+  },
+  {
+   "fieldname": "credit_debit_card_type",
+   "fieldtype": "Data",
+   "label": "Credit/Debit Card Type"
+  },
+  {
+   "fieldname": "column_break_card",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transaction_auth_code",
+   "fieldtype": "Data",
+   "label": "Auth Code"
+  },
+  {
+   "fieldname": "transaction_mode",
+   "fieldtype": "Data",
+   "label": "Transaction Mode"
+  },
+  {
+   "fieldname": "acquirer_name",
+   "fieldtype": "Data",
+   "label": "Acquirer Name"
+  },
+  {
+   "fieldname": "section_device",
+   "fieldtype": "Section Break",
+   "label": "Merchant / Device"
+  },
+  {
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "label": "Login User Number"
+  },
+  {
+   "fieldname": "merchant_id",
+   "fieldtype": "Data",
+   "label": "Merchant ID"
+  },
+  {
+   "fieldname": "business_name",
+   "fieldtype": "Data",
+   "label": "Business Name"
+  },
+  {
+   "fieldname": "column_break_device",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transaction_terminal_id",
+   "fieldtype": "Data",
+   "label": "Terminal ID"
+  },
+  {
+   "fieldname": "invoice_number",
+   "fieldtype": "Data",
+   "label": "Invoice Number"
+  },
+  {
+   "fieldname": "bill_number",
+   "fieldtype": "Data",
+   "label": "Bill Number"
+  },
+  {
+   "fieldname": "section_reference",
+   "fieldtype": "Section Break",
+   "label": "Reference Details"
+  },
+  {
+   "fieldname": "narration",
+   "fieldtype": "Data",
+   "label": "Narration"
+  },
+  {
+   "fieldname": "tg_transaction_id",
+   "fieldtype": "Data",
+   "label": "TG Transaction ID"
+  },
+  {
+   "fieldname": "transaction_stan",
+   "fieldtype": "Data",
+   "label": "Transaction STAN"
+  },
+  {
+   "fieldname": "column_break_ref",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transaction_batch_number",
+   "fieldtype": "Data",
+   "label": "Batch Number"
+  },
+  {
+   "fieldname": "ref_txn_id",
+   "fieldtype": "Data",
+   "label": "Ref Transaction ID"
+  },
+  {
+   "fieldname": "section_location",
+   "fieldtype": "Section Break",
+   "label": "Location",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "transaction_lat",
+   "fieldtype": "Data",
+   "label": "Latitude"
+  },
+  {
+   "fieldname": "transaction_long",
+   "fieldtype": "Data",
+   "label": "Longitude"
+  },
+  {
+   "fieldname": "column_break_loc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address_line1",
+   "fieldtype": "Data",
+   "label": "Address Line 1"
+  },
+  {
+   "fieldname": "address_line2",
+   "fieldtype": "Data",
+   "label": "Address Line 2"
+  },
+  {
+   "fieldname": "section_checksum",
+   "fieldtype": "Section Break",
+   "label": "Checksum",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "checksum",
+   "fieldtype": "Small Text",
+   "label": "Checksum",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "checksum_valid",
+   "fieldtype": "Check",
+   "label": "Checksum Valid",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_raw",
+   "fieldtype": "Section Break",
+   "label": "Raw Data",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "raw_data",
+   "fieldtype": "Code",
+   "label": "Raw Data",
+   "options": "JSON",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Axis Bank Integration",
+ "name": "Mosambee Transaction Log",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
