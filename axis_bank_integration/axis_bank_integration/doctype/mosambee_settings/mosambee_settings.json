@@ -14,6 +14,7 @@
   "default_company",
   "default_mode_of_payment",
   "column_break_payment",
+  "default_paid_from_account",
   "default_paid_to_account"
  ],
  "fields": [
@@ -75,9 +76,16 @@
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "default_paid_from_account",
+   "fieldtype": "Link",
+   "label": "Default Paid From Account (Receivable)",
+   "options": "Account",
+   "reqd": 1
+  },
+  {
    "fieldname": "default_paid_to_account",
    "fieldtype": "Link",
-   "label": "Default Paid To Account",
+   "label": "Default Paid To Account (Bank)",
    "options": "Account",
    "reqd": 1
   }

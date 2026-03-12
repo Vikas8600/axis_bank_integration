@@ -1,7 +1,7 @@
 {
  "actions": [],
  "autoname": "MOSAMBEE-.#####",
- "creation": "2026-03-12 00:00:00.000000",
+ "creation": "2026-03-12 00:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -59,27 +59,25 @@
  ],
  "fields": [
   {
+   "default": "Pending",
    "fieldname": "status",
    "fieldtype": "Select",
-   "label": "Status",
-   "options": "Pending\nPayment Created\nDeclined\nFailed\nDuplicate",
-   "default": "Pending",
    "in_list_view": 1,
-   "in_standard_filter": 1
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Pending\nPayment Created\nDeclined\nFailed\nDuplicate"
   },
   {
    "fieldname": "customer",
-   "fieldtype": "Link",
-   "label": "Customer",
-   "options": "Customer",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "in_standard_filter": 1
+   "in_standard_filter": 1,
+   "label": "Customer"
   },
   {
    "fieldname": "customer_name",
    "fieldtype": "Data",
    "label": "Customer Name",
-   "fetch_from": "customer.customer_name",
    "read_only": 1
   },
   {
@@ -107,15 +105,14 @@
   {
    "fieldname": "transaction_id",
    "fieldtype": "Data",
-   "label": "Transaction ID",
    "in_list_view": 1,
-   "unique": 0
+   "label": "Transaction ID"
   },
   {
    "fieldname": "transaction_date",
    "fieldtype": "Data",
-   "label": "Transaction Date",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "label": "Transaction Date"
   },
   {
    "fieldname": "transaction_time",
@@ -125,8 +122,8 @@
   {
    "fieldname": "transaction_amount",
    "fieldtype": "Currency",
-   "label": "Transaction Amount",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "label": "Transaction Amount"
   },
   {
    "fieldname": "column_break_txn",
@@ -148,10 +145,10 @@
    "label": "Transaction Type Name"
   },
   {
+   "description": "Reconciliation ID",
    "fieldname": "transaction_rrn",
    "fieldtype": "Data",
-   "label": "Transaction RRN",
-   "description": "Reconciliation ID"
+   "label": "Transaction RRN"
   },
   {
    "fieldname": "section_card",
@@ -271,10 +268,10 @@
    "label": "Ref Transaction ID"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_location",
    "fieldtype": "Section Break",
-   "label": "Location",
-   "collapsible": 1
+   "label": "Location"
   },
   {
    "fieldname": "transaction_lat",
@@ -301,10 +298,10 @@
    "label": "Address Line 2"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_checksum",
    "fieldtype": "Section Break",
-   "label": "Checksum",
-   "collapsible": 1
+   "label": "Checksum"
   },
   {
    "fieldname": "checksum",
@@ -320,10 +317,10 @@
    "read_only": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "section_raw",
    "fieldtype": "Section Break",
-   "label": "Raw Data",
-   "collapsible": 1
+   "label": "Raw Data"
   },
   {
    "fieldname": "raw_data",
@@ -334,8 +331,13 @@
   }
  ],
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-03-12 00:00:00.000000",
+ "links": [
+  {
+   "link_doctype": "Payment Entry",
+   "link_fieldname": "custom_mosambee_transaction_log"
+  }
+ ],
+ "modified": "2026-03-12 23:31:12.445536",
  "modified_by": "Administrator",
  "module": "Axis Bank Integration",
  "name": "Mosambee Transaction Log",
@@ -364,6 +366,7 @@
    "share": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
