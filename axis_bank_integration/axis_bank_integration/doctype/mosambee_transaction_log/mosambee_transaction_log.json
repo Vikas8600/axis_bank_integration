@@ -109,7 +109,7 @@
    "fieldtype": "Data",
    "label": "Transaction ID",
    "in_list_view": 1,
-   "unique": 1
+   "unique": 0
   },
   {
    "fieldname": "transaction_date",

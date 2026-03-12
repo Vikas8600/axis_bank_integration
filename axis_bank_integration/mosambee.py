@@ -5,7 +5,7 @@ import frappe
 from frappe.utils import flt, getdate
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def receive_transaction(**kwargs):
 	"""
 	Webhook endpoint for Mosambee Payment Transaction Posting.
@@ -38,21 +38,6 @@ def receive_transaction(**kwargs):
 
 		transaction_id = data.get("transactionID") or data.get("transactionId") or ""
 		response_code = str(data.get("responseCode", ""))
-
-		# Check for duplicate (skip the one we just created)
-		try:
-			existing = frappe.db.get_value(
-				"Mosambee Transaction Log",
-				{"transaction_id": transaction_id, "name": ["!=", log.name if log else ""]},
-				"name"
-			)
-			if existing:
-				if log:
-					frappe.delete_doc("Mosambee Transaction Log", log.name, force=True)
-					frappe.db.commit()
-				return {"status": 200, "message": "success", "merchant_refTxnId": data.get("billNumber", "")}
-		except Exception:
-			pass
 
 		# Determine if transaction is approved
 		is_approved = response_code in ("0", "00", "000")
