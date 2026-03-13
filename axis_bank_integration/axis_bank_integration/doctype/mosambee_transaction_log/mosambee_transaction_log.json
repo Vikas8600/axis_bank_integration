@@ -20,6 +20,7 @@
   "transaction_status",
   "response_code",
   "transaction_type_name",
+  "transaction_type_id",
   "transaction_rrn",
   "section_card",
   "card_type",
@@ -143,6 +144,12 @@
    "fieldname": "transaction_type_name",
    "fieldtype": "Data",
    "label": "Transaction Type Name"
+  },
+  {
+   "fieldname": "transaction_type_id",
+   "fieldtype": "Data",
+   "label": "Transaction Type ID",
+   "description": "1=Sale, 22=UPI, 24=BQR"
   },
   {
    "description": "Reconciliation ID",

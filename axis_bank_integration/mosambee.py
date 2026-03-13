@@ -36,10 +36,12 @@ def receive_transaction(**kwargs):
 		frappe.enqueue(
 			process_payment,
 			queue="short",
-			log_name=log.name
+			log_name=log.name,
+			now=frappe.flags.in_test,
+			at_front=True
 		)
 
-	return {"status": 200, "message": "success", "merchant_refTxnId": data.get("billNumber", "")}
+	return {"status": 200, "message": "success", "merchant_refTxnId": log.name if log else ""}
 
 
 def process_payment(log_name):
@@ -85,6 +87,7 @@ def populate_log_fields(log, data, checksum_valid):
 	log.transaction_status = data.get("transactionStatus", "")
 	log.response_code = str(data.get("responseCode", ""))
 	log.transaction_type_name = data.get("transactionTypeName", "")
+	log.transaction_type_id = str(data.get("transactionTypeId", ""))
 	log.transaction_rrn = data.get("transactionRRN", "")
 	log.card_type = data.get("cardType", "")
 	log.card_holder_name = data.get("cardHolderName", "")
@@ -113,14 +116,11 @@ def populate_log_fields(log, data, checksum_valid):
 
 
 def get_mode_of_payment(log, settings):
-	card_type = (log.card_type or "").upper()
-	cd_type = (log.credit_debit_card_type or "").upper()
+	txn_type_id = str(log.transaction_type_id or "")
 
-	if "UPI" in card_type:
+	if txn_type_id in ("22", "24"):
 		return "UPI"
-	if cd_type == "CC":
-		return "Credit Card"
-	if cd_type in ("DD", "DC"):
+	if txn_type_id == "1":
 		return "Credit Card"
 
 	return settings.default_mode_of_payment or "Credit Card"
