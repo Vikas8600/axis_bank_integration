@@ -5,7 +5,7 @@ import frappe
 from frappe.utils import flt
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def receive_transaction(**kwargs):
 	data = kwargs
 	raw_json = json.dumps(data, indent=2)
