@@ -45,6 +45,7 @@ def receive_transaction(**kwargs):
 
 
 def process_payment(log_name):
+	frappe.set_user("Administrator")
 	log = frappe.get_doc("Mosambee Transaction Log", log_name)
 
 	if log.payment_entry:
@@ -71,10 +72,16 @@ def process_payment(log_name):
 
 	settings = frappe.get_doc("Mosambee Settings")
 
-	pe_name = create_payment_entry(log, settings, customer)
-	log.status = "Payment Created"
-	log.payment_entry = pe_name
-	log.customer_name = frappe.db.get_value("Customer", customer, "customer_name") or ""
+	try:
+		pe_name = create_payment_entry(log, settings, customer)
+		log.status = "Payment Created"
+		log.payment_entry = pe_name
+		log.customer_name = frappe.db.get_value("Customer", customer, "customer_name") or ""
+	except Exception:
+		frappe.log_error(frappe.get_traceback(), "Mosambee Payment Entry Error")
+		log.status = "Failed"
+		log.error_message = frappe.get_traceback()[-500:]
+
 	log.save(ignore_permissions=True)
 	frappe.db.commit()
 
@@ -174,6 +181,7 @@ def create_payment_entry(log, settings, customer):
 		f"Card Holder: {log.card_holder_name}"
 	)
 
+	pe.flags.ignore_permissions = True
 	pe.save(ignore_permissions=True)
 
 	return pe.name

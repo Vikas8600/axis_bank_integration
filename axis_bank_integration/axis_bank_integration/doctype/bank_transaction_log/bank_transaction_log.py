@@ -20,6 +20,7 @@ class BankTransactionLog(Document):
 
 
 	def create_payment_entry(self,Transaction_Date,Virtual_Account_No, Reference_No, Amount, Type):
+		frappe.set_user("Administrator")
 		try:
 			# Get bank integration settings
 			doc = frappe.get_doc("Bank Integration Setting")
@@ -63,6 +64,7 @@ class BankTransactionLog(Document):
 				"docstatus": ["!=", 2]
 			})
 			if existing_payment:
+				self.add_comment("Comment", f"This entry was skipped to avoid duplication. Existing Payment Entry: {existing_payment}")
 				return {"message": "Duplicate Entry", "stts_flg": "N"}
 
 			# Create Payment Entry
@@ -89,6 +91,8 @@ class BankTransactionLog(Document):
 			})
 
 			if auto_submit == 1:
+				payment_entry.flags.ignore_permissions = True
+				payment_entry.insert(ignore_permissions=True)
 				payment_entry.submit()
 				self.db_set("payment_entry_created",1)
 			else:
@@ -137,8 +141,7 @@ def create_payment_entry_background():
 
 			# Validate Customer
 			if not frappe.get_value("Customer", customer_id):
-				frappe.local.response['http_status_code'] = 404
-				return {"message": "Invalid Customer", "stts_flg": "N"}
+				continue
 
 			cus = frappe.get_doc("Customer", customer_id)
 			party_type = "Customer"
@@ -159,7 +162,9 @@ def create_payment_entry_background():
 				"docstatus": ["!=", 2]
 			})
 			if existing_payment:
-				return {"message": "Duplicate Entry", "stts_flg": "N"}
+				frappe.db.set_value("Bank Transaction Log", i.get("name"), "payment_entry_created", 1)
+				frappe.get_doc("Bank Transaction Log", i.get("name")).add_comment("Comment", f"This entry was skipped to avoid duplication. Existing Payment Entry: {existing_payment}")
+				continue
 
 			# Create Payment Entry
 			payment_entry = frappe.new_doc("Payment Entry")
@@ -185,15 +190,13 @@ def create_payment_entry_background():
 			})
 
 			if auto_submit == 1:
+				payment_entry.flags.ignore_permissions = True
+				payment_entry.insert(ignore_permissions=True)
 				payment_entry.submit()
-				frappe.db.set_value("Bank Transaction Log",i.get("name"),"payment_entry_created",1)
+				frappe.db.set_value("Bank Transaction Log", i.get("name"), "payment_entry_created", 1)
 			else:
 				payment_entry.insert(ignore_permissions=True)
-				frappe.db.set_value("Bank Transaction Log",i.get("name"),"payment_entry_created",1)
-
-			return {"message": "Payment Successful", "stts_flg": "Y"}
+				frappe.db.set_value("Bank Transaction Log", i.get("name"), "payment_entry_created", 1)
 
 		except Exception:
 			frappe.log_error(frappe.get_traceback(), "Axis Bank Integration Payment Error")
-			frappe.local.response['http_status_code'] = 500
-			return {"message": "Payment Failed", "stts_flg": "N"}

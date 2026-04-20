@@ -17,7 +17,7 @@
    "description": null,
    "docstatus": 0,
    "dt": "Payment Entry",
-   "fetch_from": "cost_center.abbr",
+   "fetch_from": "company.abbr",
    "fetch_if_empty": 0,
    "fieldname": "abbr",
    "fieldtype": "Data",

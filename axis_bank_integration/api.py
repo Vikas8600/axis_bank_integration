@@ -61,7 +61,7 @@ def payment_process_from_bank(Transaction_Date, Client_Code, Virtual_Account_No,
             doc.insert(ignore_permissions=True)
             return {"message": "Payment Successful", "stts_flg": "Y"}
         else:
-            {"message": "Payment Failed", "stts_flg": "N"}
+            return {"message": "Payment Failed", "stts_flg": "N"}
 
     except Exception:
         frappe.log_error(frappe.get_traceback(), "Axis Bank Integration Payment Error")
