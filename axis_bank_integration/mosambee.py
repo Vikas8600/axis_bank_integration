@@ -35,7 +35,7 @@ def receive_transaction(**kwargs):
 	if is_approved and settings.enabled and customer_id_value:
 		frappe.enqueue(
 			process_payment,
-			queue="short",
+			queue="long",
 			log_name=log.name,
 			now=frappe.flags.in_test,
 			at_front=True
@@ -77,13 +77,29 @@ def process_payment(log_name):
 		log.status = "Payment Created"
 		log.payment_entry = pe_name
 		log.customer_name = frappe.db.get_value("Customer", customer, "customer_name") or ""
+		log.save(ignore_permissions=True)
+		frappe.db.commit()
 	except Exception:
-		frappe.log_error(frappe.get_traceback(), "Mosambee Payment Entry Error")
-		log.status = "Failed"
-		log.error_message = frappe.get_traceback()[-500:]
-
-	log.save(ignore_permissions=True)
-	frappe.db.commit()
+		error_trace = frappe.get_traceback()
+		# Reconnect DB in case connection died (e.g. RQ job timeout)
+		try:
+			frappe.db.close()
+		except Exception:
+			pass
+		frappe.connect()
+		frappe.set_user("Administrator")
+		try:
+			frappe.log_error(error_trace, "Mosambee Payment Entry Error")
+		except Exception:
+			pass
+		try:
+			failed_log = frappe.get_doc("Mosambee Transaction Log", log_name)
+			failed_log.status = "Failed"
+			failed_log.error_message = error_trace[-1000:]
+			failed_log.save(ignore_permissions=True)
+			frappe.db.commit()
+		except Exception:
+			pass
 
 
 def populate_log_fields(log, data, checksum_valid):
