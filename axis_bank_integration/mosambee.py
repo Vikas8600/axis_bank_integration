@@ -198,6 +198,8 @@ def create_payment_entry(log, settings, customer):
 	)
 
 	pe.flags.ignore_permissions = True
-	pe.save(ignore_permissions=True)
+	if settings.skip_payment_entry_validation:
+		pe.flags.ignore_validate = True
+	pe.insert(ignore_permissions=True)
 
 	return pe.name

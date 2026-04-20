@@ -15,7 +15,8 @@
   "default_mode_of_payment",
   "column_break_payment",
   "default_paid_from_account",
-  "default_paid_to_account"
+  "default_paid_to_account",
+  "skip_payment_entry_validation"
  ],
  "fields": [
   {
@@ -88,6 +89,13 @@
    "label": "Default Paid To Account (Bank)",
    "options": "Account",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "skip_payment_entry_validation",
+   "fieldtype": "Check",
+   "label": "Skip Payment Entry Validation",
+   "description": "If enabled, skips ERPNext validation on Payment Entry creation (avoids slow get_balance_on query)"
   }
  ],
  "index_web_pages_for_search": 1,
