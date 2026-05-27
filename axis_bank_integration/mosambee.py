@@ -2,7 +2,7 @@ import hashlib
 import json
 
 import frappe
-from frappe.utils import flt
+from frappe.utils import add_days, flt, getdate, today
 
 
 @frappe.whitelist(allow_guest=True)
@@ -42,6 +42,28 @@ def receive_transaction(**kwargs):
 		)
 
 	return {"status": 200, "message": "success", "merchant_refTxnId": log.name if log else ""}
+
+
+@frappe.whitelist()
+def retry_payment(log_name):
+	frappe.only_for("System Manager")
+	log = frappe.get_doc("Mosambee Transaction Log", log_name)
+	if log.payment_entry:
+		frappe.throw(f"Payment Entry already exists: {log.payment_entry}")
+
+	log.status = "Pending"
+	log.error_message = ""
+	log.save(ignore_permissions=True)
+	frappe.db.commit()
+
+	process_payment(log_name)
+
+	log.reload()
+	return {
+		"status": log.status,
+		"payment_entry": log.payment_entry,
+		"error_message": log.error_message,
+	}
 
 
 def process_payment(log_name):
@@ -170,17 +192,22 @@ def create_payment_entry(log, settings, customer):
 	paid_from_currency = frappe.db.get_value("Account", paid_from, "account_currency")
 	paid_to_currency = frappe.db.get_value("Account", paid_to, "account_currency")
 
+	try:
+		txn_date = getdate(log.transaction_date) if log.transaction_date else getdate(today())
+	except Exception:
+		txn_date = getdate(today())
+
 	pe = frappe.new_doc("Payment Entry")
 	pe.payment_type = "Receive"
 	pe.party_type = "Customer"
 	pe.party = customer
 	pe.company = company
-	pe.posting_date = frappe.utils.today()
+	pe.posting_date = add_days(txn_date, 1)
 	pe.paid_amount = log.transaction_amount
 	pe.received_amount = log.transaction_amount
 	pe.mode_of_payment = mode_of_payment
 	pe.reference_no = log.transaction_rrn or log.transaction_id
-	pe.reference_date = frappe.utils.today()
+	pe.reference_date = txn_date
 	pe.paid_from = paid_from
 	pe.paid_from_account_currency = paid_from_currency
 	pe.paid_to = paid_to
