@@ -124,6 +124,25 @@ scheduler_events = {
 # 	]
 }
 
+# Fixtures
+# -------
+
+fixtures = [
+	{
+		"dt": "Property Setter",
+		"filters": [
+			[
+				"name",
+				"in",
+				[
+					"Journal Entry-user_remark-hidden",
+					"Payment Entry-main-field_order",
+				],
+			]
+		],
+	}
+]
+
 # Testing
 # -------
 

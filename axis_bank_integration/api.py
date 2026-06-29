@@ -1,11 +1,6 @@
-from pickle import NONE
-from re import S
+import frappe
 from frappe.utils import getdate
 from frappe.utils.data import flt
-from lib2to3.pgen2.token import BACKQUOTE
-from logging import exception
-from xml.dom import ValidationErr
-import frappe
 from erpnext.accounts.doctype.payment_entry.payment_entry import get_party_details
 from erpnext.accounts.doctype.bank_account.bank_account import get_bank_account_details
 

@@ -4,9 +4,6 @@
 import frappe
 from frappe.model.document import Document
 from frappe.utils import flt
-from logging import exception
-from xml.dom import ValidationErr
-import frappe
 from erpnext.accounts.doctype.payment_entry.payment_entry import get_party_details
 from erpnext.accounts.doctype.bank_account.bank_account import get_bank_account_details
 
